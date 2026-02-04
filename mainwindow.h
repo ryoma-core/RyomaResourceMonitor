@@ -2,6 +2,8 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QTimer>
+#include "logger.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -16,6 +18,8 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+protected:
+    std::shared_ptr<Logger> m_logger;
 
 private:
     Ui::MainWindow *ui;

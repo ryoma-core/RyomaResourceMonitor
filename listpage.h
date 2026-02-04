@@ -4,6 +4,8 @@
 #include <QWidget>
 #include<QListWidgetItem>
 #include "adddialog.h"
+#include "logger.h"
+#include <QTimer>
 
 namespace Ui {
 class ListPage;
@@ -16,6 +18,7 @@ class ListPage : public QWidget
 public:
     explicit ListPage(QWidget *parent = nullptr);
     ~ListPage();
+    void SettingLogger(std::shared_ptr<Logger>& log){m_listlogger=log;}
 
 private slots:
     void on_DeviceList_itemDoubleClicked(QListWidgetItem *item);
@@ -27,17 +30,24 @@ private slots:
     void on_Delete_clicked();
 
 signals:
-    void connection(QString ip,int port);
+    void Connection(QString ip,int port);
 
 private:
     Ui::ListPage *ui;
-    void saveDevice(QString name,QString ip,QString port);
-    void loadDevices();
-    void editDevice(QString name,QString ip,QString port);
-    AddDialog adddialog;
+    void SaveDevice(QString name,QString ip,QString port);
+    void LoadDevices();
+    void EditDevice(QString name,QString ip,QString port);
+    void OnPolling();
+    void SetLoggerUI(bool ok);
+    // ------------------- //
 
-    QString exeDir;
-    QString filePath;
+    AddDialog m_adddialog;
+
+    QString m_dir;
+    QString m_path;
+    QTimer m_pollingTimer;
+
+    std::shared_ptr<Logger> m_listlogger;
 };
 
 #endif // LISTPAGE_H

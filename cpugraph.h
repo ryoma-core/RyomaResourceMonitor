@@ -23,8 +23,8 @@ public:
     ~Cpugraph();
 
 public slots:
-    void appendValue(double value);
-    void clearGraph();
+    void AppendValue(double value);
+    void ClearGraph();
 
 private:
     Ui::Cpugraph *ui;

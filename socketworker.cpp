@@ -1,8 +1,8 @@
 #include "socketworker.h"
 #include <QThread>
 #include <QTimer>
-#include "socket.h"
 #include <iostream>
+#include "socket.h"
 
 
 
@@ -16,53 +16,56 @@ SocketWorker::~SocketWorker()
 }
 
 
-void SocketWorker::start()
+void SocketWorker::Start()
 {
     m_stop.store(false);
     m_iscommunicate = true;
     Socket sock;
-    sock.settings(m_ip,m_port);
+    sock.Settings(m_ip,m_port);
     size_t reset_count = 0u;
     while(!m_stop.load())
     {
         if(reset_count == 1800u)
         {
             reset_count = 0u;
-            reSetGraph();
+            ReSetGraph();
         }
-        sock.flag = '0';
-        if(!sock.socket_start())
+        sock.m_flag = '0';
+        if(!sock.SocketStart())
         {
             m_iscommunicate = false;
             emit Failed();
+            sock.SocketStop();
             break;
         }
-        emit cpuReady(sock.data);
-        sock.flag = '1';
-        if(!sock.socket_start())
+        emit CpuReady(sock.m_data);
+        sock.m_flag = '1';
+        if(!sock.SocketStart())
         {
             m_iscommunicate = false;
             emit Failed();
+            sock.SocketStop();
             break;
         }
-        emit memoryReady(sock.data);
-        sock.flag = '2';
-        if(!sock.socket_start())
+        emit MemoryReady(sock.m_data);
+        sock.m_flag = '2';
+        if(!sock.SocketStart())
         {
             m_iscommunicate = false;
             emit Failed();
+            sock.SocketStop();
             break;
         }
-        emit diskReady(sock.data);
+        emit DiskReady(sock.m_data);
         QThread::msleep(1000);
         reset_count++;
     }
-    emit finished();
-    sock.socket_stop();
+    emit Finished();
+    sock.SocketStop();
 }
 
 
-void SocketWorker::stop()
+void SocketWorker::Stop()
 {
     m_stop = true;
 }

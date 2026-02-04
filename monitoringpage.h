@@ -5,6 +5,7 @@
 #include <QThread>
 #include <QLabel>
 #include "socketworker.h"
+#include "logger.h"
 
 
 namespace Ui {
@@ -18,12 +19,13 @@ class MonitoringPage : public QWidget
 public:
     explicit MonitoringPage(QWidget *parent = nullptr);
     ~MonitoringPage();
-    void setEndpoint(QString ip , int port);
-    void startMonitoring();
-    void stopMonitoring();
+    void SetEndpoint(QString ip , int port);
+    void StartMonitoring();
+    void StopMonitoring();
+    void SettingLogger(std::shared_ptr<Logger>& log) {m_monitoringlogger=log;}
 
 signals:
-    void goBack();
+    void GoBack();
 
 private slots:
     void on_pushButton_clicked();
@@ -36,13 +38,15 @@ private slots:
 
 private:
     Ui::MonitoringPage *ui;
-
+    void ShowStatus(const QString& msg, int ms);
+    // ------------------------ //
     QThread m_thread;
     SocketWorker* m_worker = nullptr;
-    QString device_Ip = "";
-    int device_Port = 0;
-    QLabel statusLabel;
-    void ShowStatus(const QString& msg, int ms);
+    QString m_deviceIP = "";
+    int m_devicePort = 0;
+    QLabel m_statusLabel;
+
+    std::shared_ptr<Logger> m_monitoringlogger;
 };
 
 #endif // MONITORINGPAGE_H

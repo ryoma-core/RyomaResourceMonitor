@@ -57,7 +57,7 @@ Memorygraph::~Memorygraph()
     delete ui;
 }
 
-void Memorygraph::appendValue(double value)
+void Memorygraph::AppendValue(double value)
 {
     //값 방어
     if(value < 0) value = 0;
@@ -81,7 +81,7 @@ void Memorygraph::appendValue(double value)
     }
 }
 
-void Memorygraph::clearGraph()
+void Memorygraph::ClearGraph()
 {
     m_series->clear();
     m_x = 0;

@@ -14,12 +14,12 @@ class AddDialog : public QDialog
 public:
     explicit AddDialog(QWidget *parent = nullptr);
     ~AddDialog();
-    void setting();
-    void editSetting(QString n ,QString i, QString p);
-    bool add_edit_flag = false;
+    void Setting();
+    void EditSetting(QString n ,QString i, QString p);
+    bool AddEditFlag = false;
 
 signals:
-    void done(QString n,QString i,QString p);
+    void Done(QString n,QString i,QString p);
 
 private slots:
     void on_OkButton_clicked();

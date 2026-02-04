@@ -17,24 +17,26 @@ ListPage::ListPage(QWidget *parent)
 {
     ui->setupUi(this);
 
-    exeDir = qEnvironmentVariable("LOCALAPPDATA");
-    filePath = QDir(exeDir).filePath("devices.json");
+    m_dir = QCoreApplication::applicationDirPath();
+    m_path = QDir(m_dir).filePath("devices.json");
 
-    qDebug() << "filePath =" << filePath;
-    qDebug() << "exists?  =" << QFileInfo::exists(filePath);
-    loadDevices();
-    adddialog.setting();
+    LoadDevices();
+    m_adddialog.Setting();
 
-    connect(&adddialog,&AddDialog::done,
+    connect(&m_adddialog,&AddDialog::Done,
            this,[this](QString n,QString i,QString p){
-        if(adddialog.add_edit_flag)
+        if(m_adddialog.AddEditFlag)
             {
-            editDevice(n,i,p);
+            EditDevice(n,i,p);
         }
         else{
-            saveDevice(n,i,p);
+            SaveDevice(n,i,p);
         }
     });
+
+    m_pollingTimer.setInterval(5000); //(ms) 5.0 second
+    connect(&m_pollingTimer, &QTimer::timeout, this, &ListPage::OnPolling);
+    m_pollingTimer.start();
 }
 
 ListPage::~ListPage()
@@ -42,14 +44,14 @@ ListPage::~ListPage()
     delete ui;
 }
 
-void ListPage::saveDevice(QString name,QString ip,QString port)
+void ListPage::SaveDevice(QString name,QString ip,QString port)
 {
     int portNum = port.toInt();
     if (name.isEmpty() || ip.isEmpty() || portNum <= 0) return;
 
     QJsonArray arr;
 
-    QFile readFile(filePath);
+    QFile readFile(m_path);
     if (readFile.exists() && readFile.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         QByteArray data = readFile.readAll();
@@ -69,7 +71,7 @@ void ListPage::saveDevice(QString name,QString ip,QString port)
     obj["port"] = portNum;
     arr.append(obj);
 
-    QSaveFile saveFile(filePath);
+    QSaveFile saveFile(m_path);
     if (!saveFile.open(QIODevice::WriteOnly | QIODevice::Text)) return;
 
     QJsonDocument outDoc(arr);
@@ -77,11 +79,11 @@ void ListPage::saveDevice(QString name,QString ip,QString port)
     saveFile.commit();
 }
 
-void ListPage::loadDevices()
+void ListPage::LoadDevices()
 {
     ui->DeviceList->clear();
 
-    QFile file(filePath);
+    QFile file(m_path);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) return;
 
     QByteArray data = file.readAll();
@@ -113,9 +115,9 @@ void ListPage::loadDevices()
     }
 }
 
-void ListPage::editDevice(QString name,QString ip,QString port)
+void ListPage::EditDevice(QString name,QString ip,QString port)
 {
-    QFile file(filePath);
+    QFile file(m_path);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) return;
 
     QByteArray data = file.readAll();
@@ -156,30 +158,48 @@ void ListPage::editDevice(QString name,QString ip,QString port)
         }
     }
 
-    QSaveFile saveFile(filePath);
+    QSaveFile saveFile(m_path);
     if(!saveFile.open(QIODevice::WriteOnly | QIODevice::Text)) return;
 
     QJsonDocument outDoc(arr);
     saveFile.write(outDoc.toJson(QJsonDocument::Indented));
     saveFile.commit();
-    loadDevices();
+    LoadDevices();
+}
+
+void ListPage::OnPolling()
+{
+    SetLoggerUI(m_listlogger->m_isrunning);
+}
+
+void ListPage::SetLoggerUI(bool ok)
+{
+    ui->Logger->setFixedSize(12, 12);
+    ui->Logger->setStyleSheet(QString(
+                                  "border-radius: 6px;"
+                                  "border: 1px solid #333;"
+                                  "background: %1;"
+                                  ).arg(ok ? "#00c853" : "#d50000"));
+
 }
 
 void ListPage::on_DeviceList_itemDoubleClicked(QListWidgetItem *item)
 {
     QString ip = item->data(Qt::UserRole).toString();
     int port   = item->data(Qt::UserRole + 1).toInt();
-    emit connection(ip,port);
+    QString temp = "[CONNECT] Sever Connecting";
+    m_listlogger->WriteLine(temp);
+    emit Connection(ip,port);
 }
 
 
 void ListPage::on_Add_clicked()
 {
-    adddialog.add_edit_flag= false;
-    adddialog.setting();
-    adddialog.setModal(true);
-    adddialog.exec();
-    loadDevices();
+    m_adddialog.AddEditFlag= false;
+    m_adddialog.Setting();
+    m_adddialog.setModal(true);
+    m_adddialog.exec();
+    LoadDevices();
 }
 
 
@@ -192,10 +212,10 @@ void ListPage::on_Edit_clicked()
     QString ip = item->data(Qt::UserRole).toString();
     QString port = QString::number(item->data(Qt::UserRole+1).toInt());
 
-    adddialog.add_edit_flag= true;
-    adddialog.editSetting(name,ip,port);
-    adddialog.setModal(true);
-    adddialog.exec();
+    m_adddialog.AddEditFlag= true;
+    m_adddialog.EditSetting(name,ip,port);
+    m_adddialog.setModal(true);
+    m_adddialog.exec();
 }
 
 
@@ -208,7 +228,7 @@ void ListPage::on_Delete_clicked()
     QString ip = item->data(Qt::UserRole).toString();
     int port = item->data(Qt::UserRole+1).toInt();
 
-    QFile file(filePath);
+    QFile file(m_path);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) return;
 
     QByteArray data = file.readAll();
@@ -238,12 +258,12 @@ void ListPage::on_Delete_clicked()
         }
     }
 
-    QSaveFile saveFile(filePath);
+    QSaveFile saveFile(m_path);
     if(!saveFile.open(QIODevice::WriteOnly | QIODevice::Text)) return;
 
     QJsonDocument outDoc(arr);
     saveFile.write(outDoc.toJson(QJsonDocument::Indented));
     saveFile.commit();
-    loadDevices();
+    LoadDevices();
 }
 

@@ -19,6 +19,7 @@ qt_add_executable(RyomaResourceMonitor
     diskgraph.h diskgraph.cpp diskgraph.ui
     socketworker.h socketworker.cpp
     adddialog.h adddialog.cpp adddialog.ui
+    logger.h logger.cpp
 )
 
 

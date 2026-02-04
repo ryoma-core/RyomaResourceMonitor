@@ -15,17 +15,17 @@ public:
     bool m_iscommunicate = false;
 
 public slots:
-    void start();
-    void stop();
+    void Start();
+    void Stop();
 
 signals:
-    void cpuReady(double v);
-    void memoryReady(double v);
-    void diskReady(double v);
+    void CpuReady(double v);
+    void MemoryReady(double v);
+    void DiskReady(double v);
     void Failed();
-    void reSetGraph();
+    void ReSetGraph();
 
-    void finished();
+    void Finished();
 private:
     std::string m_ip;
     size_t m_port = 0;

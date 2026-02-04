@@ -59,7 +59,7 @@ Diskgraph::~Diskgraph()
     delete ui;
 }
 
-void Diskgraph::appendValue(double value)
+void Diskgraph::AppendValue(double value)
 {
     //값 방어
     if(value < 0) value = 0;
@@ -83,7 +83,7 @@ void Diskgraph::appendValue(double value)
     }
 }
 
-void Diskgraph::clearGraph()
+void Diskgraph::ClearGraph()
 {
     m_series->clear();
     m_x = 0;

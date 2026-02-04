@@ -60,7 +60,7 @@ Cpugraph::~Cpugraph()
     delete ui;
 }
 
-void Cpugraph::appendValue(double value)
+void Cpugraph::AppendValue(double value)
 {
     //값 방어
     if(value < 0) value = 0;
@@ -84,7 +84,7 @@ void Cpugraph::appendValue(double value)
     }
 }
 
-void Cpugraph::clearGraph()
+void Cpugraph::ClearGraph()
 {
     m_series->clear();
     m_x = 0;

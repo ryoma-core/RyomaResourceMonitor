@@ -16,7 +16,7 @@ MonitoringPage::MonitoringPage(QWidget *parent)
 
 MonitoringPage::~MonitoringPage()
 {
-    if (m_worker)m_worker->stop();
+    if (m_worker)m_worker->Stop();
 
     m_thread.quit();
     m_thread.wait();
@@ -25,44 +25,49 @@ MonitoringPage::~MonitoringPage()
 }
 
 
-void MonitoringPage::setEndpoint(QString ip, int port)
+void MonitoringPage::SetEndpoint(QString ip, int port)
 {
-    device_Ip = ip;
-    device_Port = port;
+    m_deviceIP = ip;
+    m_devicePort = port;
 }
 
-void MonitoringPage::startMonitoring()
+void MonitoringPage::StartMonitoring()
 {
-    stopMonitoring();
+    StopMonitoring();
 
-    m_worker = new SocketWorker(device_Ip.toStdString(),
-                                static_cast<size_t>(device_Port));
+    m_worker = new SocketWorker(m_deviceIP.toStdString(),
+                                static_cast<size_t>(m_devicePort));
     m_worker->moveToThread(&m_thread);
 
     connect(m_worker, &SocketWorker::Failed, this, [this]{
         ShowStatus("[ERROR](Network)-\"Socket Networking\"", 5000);
+        if(m_monitoringlogger)
+            {
+        QString temp = "[ERROR](Network)-\"Socket Networking\"";
+        m_monitoringlogger->WriteLine(temp);
+        }
     }, Qt::QueuedConnection);
 
     connect(&m_thread, &QThread::started,
-            m_worker, &SocketWorker::start, Qt::QueuedConnection);
+            m_worker, &SocketWorker::Start, Qt::QueuedConnection);
 
-    connect(m_worker, &SocketWorker::cpuReady,
-            ui->cpuPageWidget, &Cpugraph::appendValue, Qt::QueuedConnection);
+    connect(m_worker, &SocketWorker::CpuReady,
+            ui->cpuPageWidget, &Cpugraph::AppendValue, Qt::QueuedConnection);
 
-    connect(m_worker, &SocketWorker::memoryReady,
-            ui->memoryPageWidget, &Memorygraph::appendValue, Qt::QueuedConnection);
+    connect(m_worker, &SocketWorker::MemoryReady,
+            ui->memoryPageWidget, &Memorygraph::AppendValue, Qt::QueuedConnection);
 
-    connect(m_worker, &SocketWorker::diskReady,
-            ui->diskPageWidget, &Diskgraph::appendValue, Qt::QueuedConnection);
+    connect(m_worker, &SocketWorker::DiskReady,
+            ui->diskPageWidget, &Diskgraph::AppendValue, Qt::QueuedConnection);
 
-    connect(m_worker, &SocketWorker::reSetGraph,
+    connect(m_worker, &SocketWorker::ReSetGraph,
             this, [this](){
-                ui->cpuPageWidget->clearGraph();
-                ui->memoryPageWidget->clearGraph();
-                ui->diskPageWidget->clearGraph();
+                ui->cpuPageWidget->ClearGraph();
+                ui->memoryPageWidget->ClearGraph();
+                ui->diskPageWidget->ClearGraph();
             }, Qt::QueuedConnection);
 
-    connect(m_worker, &SocketWorker::finished,
+    connect(m_worker, &SocketWorker::Finished,
             &m_thread, &QThread::quit, Qt::QueuedConnection);
 
     connect(&m_thread, &QThread::finished,
@@ -71,10 +76,15 @@ void MonitoringPage::startMonitoring()
     m_thread.start();
 }
 
-void MonitoringPage::stopMonitoring()
+void MonitoringPage::StopMonitoring()
 {
     if (!m_worker) return;
-    m_worker->stop();
+    if(m_monitoringlogger)
+    {
+    QString temp = "[STOP] Thread Stop";
+    m_monitoringlogger->WriteLine(temp);
+    }
+    m_worker->Stop();
     m_thread.quit();
     m_thread.wait();
     m_worker = nullptr;
@@ -100,16 +110,25 @@ void MonitoringPage::on_pushButton_3_clicked()
 
 void MonitoringPage::on_pushButton_4_clicked()
 {
-    emit goBack();
+
+    if(m_monitoringlogger)
+    {
+    QString temp = "[DISCONNECTED] Server Disconnected";
+    m_monitoringlogger->WriteLine(temp);
+    }
+    ui->cpuPageWidget->ClearGraph();
+    ui->memoryPageWidget->ClearGraph();
+    ui->diskPageWidget->ClearGraph();
+    emit GoBack();
 }
 
 void MonitoringPage::ShowStatus(const QString &msg, int ms)
 {
-    statusLabel.setText(msg);
-    statusLabel.show();
+    m_statusLabel.setText(msg);
+    m_statusLabel.show();
     QTimer::singleShot(ms, this, [this]{
-        statusLabel.clear();
-        statusLabel.hide();
+        m_statusLabel.clear();
+        m_statusLabel.hide();
     });
 }
 

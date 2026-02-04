@@ -14,14 +14,14 @@ AddDialog::~AddDialog()
     delete ui;
 }
 
-void AddDialog::setting()
+void AddDialog::Setting()
 {
     ui->Name->clear();
     ui->IP->clear();
     ui->PORT->clear();
 }
 
-void AddDialog::editSetting(QString n, QString i, QString p)
+void AddDialog::EditSetting(QString n, QString i, QString p)
 {
     ui->Name->setText(n);
     ui->IP->setText(i);
@@ -38,14 +38,14 @@ void AddDialog::on_OkButton_clicked()
                            ui->OkButton);
         return;
     }
-    emit done(ui->Name->text(),ui->IP->text(),ui->PORT->text());
+    emit Done(ui->Name->text(),ui->IP->text(),ui->PORT->text());
     accept();
 }
 
 
 void AddDialog::on_CancelButton_clicked()
 {
-    setting();
+    Setting();
     reject();
 }
 

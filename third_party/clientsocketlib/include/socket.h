@@ -9,26 +9,26 @@ class Socket
     public:
         Socket();
         ~Socket();
-        bool socket_start();
-        void socket_stop();
-        void settings(std::string ip, size_t port);
-        void change_flag(char f) { flag = f;};
-        bool connect_to_server();
-        char flag = '0';
-        double data = 0;
-        bool starting = false;
-        std::string server_Ip;
-        size_t server_Port;
+        bool SocketStart();
+        void SocketStop();
+        void Settings(std::string ip, size_t port);
+        void ChangeFlag(char f) { m_flag = f;};
+        bool ConnectToServer();
+        char m_flag = '0';
+        double m_data = 0;
+        bool m_starting = false;
+        std::string m_serverIp;
+        size_t m_server_Port;
     private:
     #pragma region Members
-        WSADATA wsaData;
-        SOCKET connectSocket;
-        SOCKADDR_IN serverAddr = {};
-        std::string acc;
+        WSADATA m_wsaData;
+        SOCKET m_connectSocket;
+        SOCKADDR_IN m_serverAddr = {};
+        std::string m_acc;
     #pragma endregion
     #pragma region Methods
-    bool recvCall();
-    bool sendCall();
+    bool RecvCall();
+    bool SendCall();
     #pragma endregion
 
 };
