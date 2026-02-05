@@ -3,7 +3,7 @@
     <img src="UI_Image/64px-YouTube_full-color_icon_(2017).svg.png" alt="유튜브" width="40" style="vertical-align: middle;"/>
   </a>
   <span style="vertical-align: middle;">
-    Ryuichi MINI-DAW(샘플 작곡 소프트웨어) — JUCE × Rust (FFI)
+    RyomaResourceMonitor
   </span>
 </h1>
 
