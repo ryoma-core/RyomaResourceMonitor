@@ -40,50 +40,24 @@
 - 서버에 CPU,MEMORY,DISK에 사용률을 그래프로 조회 가능
 
 ### 기본 사용 흐름(짧게)
-1. Assets 로드
-2. 트랙에 사운드 배치
-3. PlayBar에서 재생/정지/BPM 조작
-4. Mixer/Track UI에서 파라미터 조절
-5. (선택) VST3 로딩 후 이펙트 적용
+1. RyomaResourceMonitor.log 오픈 수정 준비 완료
+2. devices.json 로드
+3. 아이템 리스트에 장비 추가
+4. 장비 접속(Socket 통신 시작)
+5. recv 데이터 그래프를 통한 가시화
 
 ---
 
 ## 2. 프로젝트 개요
 
 ### 아키텍처 요약
-- **C++ (JUCE)**: UI, 플러그인 호스트, AudioCallback 출력, 타임라인/트랙 상태 관리
-- **Rust (DLL)**: 디코딩/믹싱/버퍼링 등 오디오 엔진 로직
-- **FFI**로 엔진 핸들을 생성/해제하여 런타임 연결
-
----
-
-## 🗂️ 폴더 구성 (Repo 기준)
-
-| 경로(Path)                  | 설명 |
-|----------------------------|------|
-| `Source/`                  | 메인 소스 루트 |
-| `Source/Main/`             | 메인 엔트리/부트스트랩 |
-| `Source/AudioEngine/`      | 오디오 엔진 관리, I/O, 콜백 연동(FFI 포함) |
-| `Source/AssetsPath/`       | 에셋 경로 유틸/로더 |
-| `Source/ClipData/`         | 오디오 파형/클립 데이터(시각화) |
-| `Source/soundData/`        | 파라미터 저장소(볼륨/팬/뮤트 등) |
-| `Source/TimeLineState/`    | 타임라인 상태/핸들러(재생 위치/BPM 등) |
-| `Source/GUI/`              | GUI 전반 |
-| `Source/GUI/BackGround/`   | 메인 배경/레이아웃 |
-| `Source/GUI/VST3Window/`   | VST3 윈도우 관리 |
-| `Source/GUI/SoundSource/`  | 사운드 에셋 브라우저/뷰 |
-| `Source/GUI/Button/`       | 버튼 위젯/이벤트 |
-| `Source/GUI/Track/`        | 트랙 UI |
-| `Source/GUI/Slider/`       | 트랙 볼륨/슬라이더 |
-| `Source/GUI/Mixer/`        | 믹서 UI |
-| `Source/GUI/PlayBar/`      | 재생/정지/BPM 컨트롤 |
-| `Source/GUI/LookAndFeel/`  | 커스텀 Look&Feel 테마 |
-| `Source/Sound/`            | 오디오 콜백/출력 관리 |
+- **C++ (lib)**: Socket 통신
+- **Qt (C++)**: UI
 
 ---
 
 ## 3. 주요 모듈
-### 🎧 실시간 오디오 출력 (JUCE AudioCallback)
+### 🛜 Socket 통신 (JUCE AudioCallback)
 **파일:** [Source/AudioHostController.h](https://github.com/damien-cpp-rt/Ryuichi_DAW/blob/master/Source/AudioHostController.h)  
 💡 기능: 오디오 디바이스 콜백에서 출력 버퍼를 실시간으로 채움 (실시간 엔트리 포인트)  
 📌 포인트:
