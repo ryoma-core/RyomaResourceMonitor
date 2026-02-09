@@ -19,7 +19,7 @@
   <img alt="Platform" src="https://img.shields.io/badge/Client-Windows%20x64-black" />
   <img alt="Network" src="https://img.shields.io/badge/Network-TCP-black" />
   <img alt="Storage" src="https://img.shields.io/badge/Storage-JSON-1abc9c" />
-  <img src="UI_Image/preview.png" alt="Preview" width="900"/>
+  <img src="third_party/clientsocketlib/RyomaResourceMonitor.png" alt="Preview" width="900"/>
 </p>
 
 <hr/>
