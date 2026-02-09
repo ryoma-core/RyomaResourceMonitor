@@ -13,9 +13,9 @@
 </p>
 
 <p align="center">
-  <img alt="C++" src="https://img.shields.io/badge/C%2B%2B-17-00599C?logo=c%2B%2B" /></a>
-  <img alt="Qt" src="https://img.shields.io/badge/Qt-6-41CD52?logo=qt" /></a>
-  <img alt="CMake" src="https://img.shields.io/badge/CMake-build-064F8C?logo=cmake" /></a>
+  <img alt="C++" src="https://img.shields.io/badge/C%2B%2B-17-00599C?logo=c%2B%2B" />
+  <img alt="Qt" src="https://img.shields.io/badge/Qt-6-41CD52?logo=qt" />
+  <img alt="CMake" src="https://img.shields.io/badge/CMake-build-064F8C?logo=cmake" />
   <img alt="Platform" src="https://img.shields.io/badge/Client-Windows%20x64-black" />
   <img alt="Network" src="https://img.shields.io/badge/Network-TCP-black" />
   <img alt="Storage" src="https://img.shields.io/badge/Storage-JSON-1abc9c" />
@@ -34,13 +34,13 @@
 ---
 
 ## 1. 프로젝트 소개
-> RyomaResourceMonitor고, 내용은 **서버 자원 가시화 소프트웨어**입니다.
+> RyomaResourceMonitor이고, 내용은 **서버 자원 가시화 소프트웨어**입니다.
 
 ### 무엇을 할 수 있나
 - 서버에 CPU,MEMORY,DISK에 사용률을 그래프로 조회 가능
 
 ### 기본 사용 흐름(짧게)
-1. 실행 시 로그 파일(RyomaResourceMonitor.log) 생성 및 기록
+1. 실행 시 `RyomaResourceMonitor.log` 생성 및 로그 기록
 2. devices.json 로드
 3. 아이템 리스트에 장비 추가
 4. 장비 접속(Socket 통신 시작)
@@ -53,6 +53,7 @@
 ### 아키텍처 요약
 - **C++ (lib)**: Socket 통신
 - **Qt (C++)**: UI
+- **QThread Worker**: 수집 스레드 → Signal/Slot으로 UI 업데이트
 
 ---
 
@@ -82,7 +83,7 @@
 
 ### 📈 모니터링 페이지
 **파일:** [RyomaResourceMonitor/monitoringpage.h](https://github.com/ryoma-core/RyomaResourceMonitor/blob/main/monitoringpage.h)  
-💡 기능: 연결된 서버에 대한 자원 가시화 **C++ (lib)**: Socket 통신  
+💡 기능: 연결된 서버에 대한 자원(CPU/MEM/DISK) 가시화
 
 ---
 
@@ -103,9 +104,9 @@
 
 ## 5. 참고사항(설치및 사용방법으로)
 ### 🧰 설치및 실행 방법 (Windows)
-- **Qt** 설치
-- 프로젝트 추가
-- 빌드 실행
+- **Qt 6.x** 설치 (Qt Creator 권장)
+- CMake 빌드 예시:
+  - `cmake -S . -B build`
+  - `cmake --build build --config Release`
 
 ---
-
