@@ -40,7 +40,7 @@
 - 서버에 CPU,MEMORY,DISK에 사용률을 그래프로 조회 가능
 
 ### 기본 사용 흐름(짧게)
-1. RyomaResourceMonitor.log 오픈 수정 준비 완료
+1. 실행 시 로그 파일(RyomaResourceMonitor.log) 생성 및 기록
 2. devices.json 로드
 3. 아이템 리스트에 장비 추가
 4. 장비 접속(Socket 통신 시작)
