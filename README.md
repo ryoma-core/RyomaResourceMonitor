@@ -87,36 +87,6 @@
 
 ---
 
-## 3. 주요 모듈
-### 💻 Client Socket 통신 
-**파일:** [libclientsocketlib.a](https://github.com/ryoma-core/cpp-windows-socket-client)  
-💡 기능: 소켓 객체를 생성 하여 통신 및 데이터 전달하는 API  
-📌 포인트:
-- 소켓 통신
-- 데이터 요청
-
----
-
-### 🖥️ Server Socket 통신
-**파일:** [example](https://github.com/ryoma-core/cpp-linux-socket-server)  
-💡 기능: 소켓 통신을 통한 전달받은 데이터 타입에 맞추어 서버 자원 파싱 하여 값 Send
-📌 포인트:
--  서버 자원 파싱
--  데이터 전달
----
-
-### ✅ 장비 리스트 페이지
-**파일:** [RyomaResourceMonitor/listpage.h](https://github.com/ryoma-core/RyomaResourceMonitor/blob/main/listpage.h)  
-💡 기능: 장비 추가 및 수정,삭제 관리및 연결을 진행
-
----
-
-### 📈 모니터링 페이지
-**파일:** [RyomaResourceMonitor/monitoringpage.h](https://github.com/ryomacore/RyomaResourceMonitor/blob/main/monitoringpage.h)
-💡 기능: 연결된 서버에 대한 자원 가시화
-
----
-
 ### 🏠 MainWindow (App Root)
 **파일:** [RyomaResourceMonitor/mainwindow.h](https://github.com/ryoma-core/RyomaResourceMonitor/blob/main/mainwindow.h)  
 💡 기능: 앱의 전체 화면을 관리하는 Window
