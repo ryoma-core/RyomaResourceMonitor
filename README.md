@@ -81,7 +81,7 @@
 ---
 
 ### 📈 모니터링 페이지
-**파일:** [RyomaResourceMonitor/monitoringpage.h](https://github.com/ryomacore/RyomaResourceMonitor/blob/main/monitoringpage.h)
+**파일:** [RyomaResourceMonitor/monitoringpage.h](https://github.com/ryoma-core/RyomaResourceMonitor/blob/main/monitoringpage.h)
 💡 기능: 연결된 서버에 대한 자원 가시화 **C++ (lib)**: Socket 통신
 - **Qt (C++)**: UI
 
